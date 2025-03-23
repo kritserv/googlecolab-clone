@@ -1,0 +1,84 @@
+html,
+body {
+    font-family: monospace;
+}
+
+#header-logo {
+    height: 64px;
+    padding-left: 10px;
+    width: 50px;
+}
+
+.colab-large-icon {
+    height: 60px;
+    width: 40px;
+}
+
+nav {
+    display: flex;
+    border-bottom: 1px solid #999;
+}
+
+nav .project-name {
+    margin-left: 40px;
+    font-weight: 1000;
+    font-size: 1.4rem;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    font-size: 1.5rem;
+    min-width: 25px;
+    min-height: 25px;
+    margin: 9px;
+}
+
+a:hover {
+    background: #f7f7f7;
+}
+
+.code {
+    width: 80%;
+    height: 100px;
+    padding-left: 35px;
+    border: none;
+    background: #f7f7f7;
+}
+
+.code:focus {
+    outline: none;
+    box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.1);
+}
+
+.code-result {
+    width: 80%;
+    margin-bottom: 10px;
+    color: #333;
+    border: 1px solid #ccc;
+    border-top: none;
+    padding-left: 35px;
+}
+
+.code-tools {
+    display: none;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* Show code tool when textarea is focused */
+.code-container:focus-within .code-tools {
+    display: flex;
+}
+
+@media screen and (min-width: 1000px) {
+    .code-container:focus-within form {
+        margin-top: -42px;
+    }
+    .code-tools {
+        padding-left: 900px;
+    }
+
+.error {
+    color: red;
+}
