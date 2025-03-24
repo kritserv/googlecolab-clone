@@ -94,7 +94,7 @@ def index():
                     if 'class' in line:
                         variable = line.split('class')[1].split('(')[0].split(':')[0].strip()
                     if 'import' in line:
-                        variable = line.split('import')[1].split('as')[1].strip()
+                        variable = line.split('import')[1].split('as')[-1].strip()
                     if variable:
                         global_list.append(f"global {variable}")
 
