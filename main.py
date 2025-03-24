@@ -1,15 +1,14 @@
-from bottle import route, run, template, get, static_file, request, redirect
+from bottle import route, run, template, get, static_file, request, redirect, abort
 from json import dump, load, JSONDecodeError
 
 save_file = 'data.json'
 
-@get("/static/<filepath:re:.*.css>")
-def css(filepath):
-    return static_file(filepath, root="static")
-
-@get("/static/<filepath:re:.*.ico>")
-def favicon(filepath):
-    return static_file(filepath, root="static")
+@get("/static/<filepath:path>")
+def serve_static(filepath):
+    allowed_extensions = (".css", ".js", ".ico")
+    if filepath.endswith(allowed_extensions):
+        return static_file(filepath, root="static")
+    abort(403, "Forbidden file type")
 
 def load_save_file():
     try:
@@ -84,27 +83,34 @@ def index():
             global_list = []
 
             for line in code.split('\n'):
-                if '=' in line:
-                    if not '+=' in line and not '-=' in line and not '*=' in line and not '/=' in line:
-                        variable = line.split('=')[0]
-                        variable = variable.strip()
+                if not line.startswith(' '):
+                    if '=' in line:
+                        if not '+=' in line and not '-=' in line and not '*=' in line and not '/=' in line:
+                            variable = line.split('=')[0]
+                            variable = variable.strip()
+                            global_list.append(f"global {variable}")
+                    if 'def' in line:
+                        variable = line.split('def')[1].split('(')[0].strip()
                         global_list.append(f"global {variable}")
-                if 'def' in line:
-                    variable = line.split('def')[1].split('(')[0].strip()
-                    global_list.append(f"global {variable}")
+                    if 'class' in line:
+                        variable = line.split('class')[1].split('(')[0].split(':')[0].strip()
+                        global_list.append(f"global {variable}")
+                    if 'import' in line:
+                        variable = line.split('import')[1].split('as')[1].strip()
+                        global_list.append(f"global {variable}")
 
             try:
                 code_with_globals = '\n'.join(global_list) + '\n' + code
+                print(code_with_globals)
                 exec(code_with_globals)
                 last_line = code.split('\n')[-1]
-                if '=' not in last_line and last_line != '' and last_line != '"""' and last_line != "'''":
+                if '=' not in last_line and last_line != '' and last_line != '"""' and last_line != "'''" and not last_line.startswith(' ') and not last_line.startswith('from') and not last_line.startswith('import'):
                     if 'print' in last_line:
                         last_line = last_line.replace('print(','')[:-1]
+                    last_line = last_line.strip()
                     result = eval(last_line)
             except Exception as e:
                 error = str(e)
-                if error == "invalid syntax (<string>, line 1)":
-                    error = ""
 
             if 0 <= index < len(codes):
                 codes[index] = code
