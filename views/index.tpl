@@ -54,7 +54,6 @@
                                 <td><a href="javascript:;" onclick="document.getElementById('form{{ index }}').submit()">▶</a></td>
                                 <td style="width:90vw;"><textarea class="code" name="code">{{ code }}</textarea></td>
                             </tr>
-                            %if len(results[index]) or errors[index]:
                             <tr>
                                 <td></td>
                                 <td>
@@ -64,7 +63,6 @@
                                     </div>
                                 </td>
                             </tr>
-                            %end
                         </table>
                         <input type="hidden" name="index" value="{{ index }}">
                     </form>

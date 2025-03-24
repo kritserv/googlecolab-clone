@@ -84,19 +84,18 @@ def index():
 
             for line in code.split('\n'):
                 if not line.startswith(' '):
+                    variable = False
                     if '=' in line:
                         if not '+=' in line and not '-=' in line and not '*=' in line and not '/=' in line:
                             variable = line.split('=')[0]
                             variable = variable.strip()
-                            global_list.append(f"global {variable}")
                     if 'def' in line:
                         variable = line.split('def')[1].split('(')[0].strip()
-                        global_list.append(f"global {variable}")
                     if 'class' in line:
                         variable = line.split('class')[1].split('(')[0].split(':')[0].strip()
-                        global_list.append(f"global {variable}")
                     if 'import' in line:
                         variable = line.split('import')[1].split('as')[1].strip()
+                    if variable:
                         global_list.append(f"global {variable}")
 
             try:
