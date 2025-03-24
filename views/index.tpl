@@ -6,6 +6,11 @@
         <title>Untitled project</title>
         <link type="text/css" href="/static/styles.css" rel="stylesheet">
         <link id="favicon-link" rel="shortcut icon" href="/static/img_favicon.ico">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/python/python.min.js"></script>
+
     </head>
 
     <body>
@@ -49,6 +54,7 @@
                                 <td><a href="javascript:;" onclick="document.getElementById('form{{ index }}').submit()">▶</a></td>
                                 <td style="width:90vw;"><textarea class="code" name="code">{{ code }}</textarea></td>
                             </tr>
+                            %if results[index] or errors[index]:
                             <tr>
                                 <td></td>
                                 <td>
@@ -58,6 +64,7 @@
                                     </div>
                                 </td>
                             </tr>
+                            %end
                         </table>
                         <input type="hidden" name="index" value="{{ index }}">
                     </form>
@@ -65,5 +72,20 @@
                 %end
             </ol>
         </main>
+
+        <script>
+          document.querySelectorAll('.code').forEach((textarea, idx) => {
+            const editor = CodeMirror.fromTextArea(textarea, {
+              lineNumbers: false,
+              mode: 'python',
+              indentUnit: 4
+            });
+
+            const form = textarea.closest('form');
+            form.addEventListener('submit', () => {
+              editor.save();
+            });
+          });
+        </script>
     </body>
 </html>
